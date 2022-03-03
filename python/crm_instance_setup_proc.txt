@@ -1,0 +1,164 @@
+ Setting up a new crm instance
+
+A. Create a new user under tissow.com
+	a. loging to www.gmail.com using janapoornavel@tissow.com/ 7nGhZyBq&#(#
+	b. Select the Admin option from the 9 dot menu option that is the far right corner, or go there using
+		https://admin.google.com/tissow.com/AdminHome?hl=en&pli=1&fral=1
+	c. Under Admin option, select users
+	d. Press the plus button at the left corner near Users text
+		- Select the Add new users
+		- Type in the user name, first name and last name. For e.g
+			fypo as user name, finalyearprojects as first name and gts and second name
+
+B. Create a new Project for the newly created user under google cloud account
+	a. type google cloud in browser and go to google console
+	b. Create a new project for the account
+	c. Add credit card information under billing section
+	d. Ensure that you are in free billing mode		
+
+C. Creating a new image from junomeadmin@gmail.com(For now this is not needed as I have already created the image)
+	1. Login into google cloud using junomecontact.interior@gmail.com/8mHjZuNw
+	2. If you are using google console in chrome, follow below instructions
+		- sudo login jpvel 
+		- enter password as password
+		- Go to each of the screen and stop all the servers
+	3. The above steps are done to stop the machine for creating an image
+	4. Select compute engine menu, select image option
+	5. In the Image screen, 
+		- For name cloning-for-candycrm-[date]
+		- Mention candycrm as the family name
+		- Let the encryption by as it is
+		- In the source let the source be Disk
+		- Under source disk select bonsai-crm-instance
+	6. After you have created the image, you should be able to see it in the listing page
+	
+D. Assigning the image outside the junome contact to newly created user - This is for CRM. For site landing page - use junomesite.su@gmail.com
+	1.After creating image go to IAM option through menu or use below url
+		https://console.cloud.google.com/iam-admin/iam?project=bonsai-crm
+	2. Press add button and specify the email id (fypo@tissow.com)
+	3. Select Comput engine as first option and choose compute image viewer and compute viewer
+	4. Once created your username should successfully appear under listing screen
+
+E. Creating a new machine with the created image the email id, for e.g fypo@tissow.com		
+	1. Login into google cloud using the email id and password
+	2. Go to compute instance and select create new instance
+Name - candycrm-fypo, location - Mumbai, Zone - Any, Machine type - Small
+	3. Under compute instance, in boot disk section, use the change button
+	4. After selecting the change button, use custom image, and under custom image select bonsai-crm project and you will see the image name in the selection option.Allow HTTP traffic, Allow HTTPS traffic
+	5. Start the instance once it is successfully created
+
+F. Cleaning up and bootstrapping the instance
+	0. use gcloud command to loging into the server
+		- Once logged in the machine use sudo login jpvel with password as password to access the machine as jpvel
+	1. Start a new byobu instance
+	2. Stop the apache instance - /etc/init.d/apache2 stop
+	3. Name the first tab as CandyCRM Server using f8 key
+		cd /home/jpvel/Workspace/bonsai-beta/bonsai
+ 		sudo mvn spring-boot:run>output.log&
+ 		tail -100f output.log
+	4. Ensure the MySQL instance is started - Add a tab for MySQL as  MySQL
+		mysql -uroot -ppassword bonsai_crm
+	5. Create a new tab called HandyMan and build the handyman server
+		cd /home/jpvel/Workspace/bonsai-beta/sparrow/sparrow-server 
+		mvn clean compile install -U -Dmaven.test.skip=true
+		cd /home/jpvel/Workspace/bonsai-beta/candyman/
+		./starthandyman.sh
+	6. Create a new tab called Lynchpin and start the superset server
+		sudo superset runserver
+	7. Create a new tab called tubby
+		cd /home/jpvel/Workspace/bonsai-beta/candyman/
+		./wgb.sh
+	8. Cleaning up work in database using mysql -uroot -ppassword in MySQL tab in byobu
+		Tables to cleanup
+		set foreign_key_checks=0;
+		drop table order_info_backup_22_02_2018;
+		drop table order_info_bkup_2018_04_20_b4reason_cleanup;
+		drop table order_info_bkup_b4statusrename_2018_04_02;
+		drop table order_info_items_backup_27_02_2018;
+		drop table product_backup;
+		drop table product_bkup_b4cleanup_2018_04_13;
+		drop table vendor_backup;
+		drop table vendor_bkup_b4dedup_2018_04_01;
+		drop table copy_order_item;
+		drop table copy_order_info_history;
+		drop table 135_calllog;
+		drop table copy_customer;
+		drop table copy_history_item;
+		drop table copy_order_info;
+		drop table if exist copy_order_info_history;
+		drop table order_item_backup_22_02_2018;
+		drop table customer_22_02_2018;
+		drop table customer_backup_b4vendordedup_2018_04_01;
+		drop table customer_bkup_b4vendorupdate_09_04_2018;
+		drop table bi_call_detail;
+		drop table bi_conv_attrib;
+		drop table bi_intent_fb_src_bkup_1;
+		drop table bi_intent_serving_vendor;
+		drop table bi_intent_spec;
+		drop table bi_pick_list;
+		drop table bi_quotation;
+		drop table bi_sales;
+		drop table bi_soft_exchange;
+		drop table bi_vendor_master;
+		drop table bonsai_lead_status_b4statusrename_2018_04_01;
+		drop table bonsai_lead_status_bkup;
+		drop table copy_order_info_items;
+		drop table QRTZ_BLOB_TRIGGERS;
+		drop table QRTZ_CALENDARS;
+		drop table QRTZ_CRON_TRIGGERS;
+		drop table QRTZ_FIRED_TRIGGERS;
+		drop table QRTZ_LOCKS;
+		drop table QRTZ_SIMPLE_TRIGGERS;
+		drop table QRTZ_JOB_DETAILS;
+		drop table QRTZ_PAUSED_TRIGGER_GRPS;
+		drop table QRTZ_SCHEDULER_STATE;
+		drop table QRTZ_SIMPROP_TRIGGERS;
+		drop table QRTZ_TRIGGERS;
+		drop table customer_backup_22_02_2018;
+		drop table zoho_lead_status_bkup;
+		drop table zoho_call;
+		drop table zoho_contact;
+		drop table zoho_leads;
+		drop table zoho_notes;
+		truncate call_log;
+		truncate customer;
+		truncate order_info;
+		truncate order_info_history;
+		truncate order_info_items;
+		truncate order_item;
+		truncate leads_soft;                                                                                                       
+		truncate leads_syfd;
+		delete from vendor where id not in (20);
+		use spw_audit;
+		truncate instance_audit;
+		truncate command_audit;
+		truncate statement_audit;
+
+
+I. Update the Handyman configuration
+	- use the MySQL tab
+	- give - use spw_config
+	- and  - show databases; - to confirm database - spw_config
+	- update the campaign ids of the process
+			- UPDATE spw_instance_config set value='6104999490357' where variable='campaign-id-list' and instance like '%bonsai%';
+	- update the impersonated user and calenderid to the newly created email id for.eg fypo@tissow.com
+	        - Update spw_instance_config set value='ideac@tissow.com' where variable =impersonated user' and instance like '%bonsai%'
+			- Update spw_instance_config set value='ideac@tissow.com' where variable ='calendarid' and instance like '%bonsai%'
+
+
+J. Fire the job 
+	- use Processnapkin tab
+	- key in wget -O "start.fb.log" http://localhost:9377/process/bonsai.leadingestion.process/1/start
+	- use MySQL tab
+	- key in use bonsai_crm;update order_info set status='Fresh';
+
+K. Log into Godaddy and goto manage dns under junome.in
+	1. Say add
+	2. Select A as option
+	3. Get the static ip address from compute instance and add it to the ipaddres section name as for example fypo
+	4. Visit fypo.junome.in and key in the admin user name and visit Fresh leads
+					
+
+
+
+				

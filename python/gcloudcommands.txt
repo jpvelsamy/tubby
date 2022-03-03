@@ -1,0 +1,44 @@
+Using multiple gcloud configurations
+-------------------------------------------
+
+
+https://www.the-swamp.info/blog/configuring-gcloud-multiple-projects/
+
+
+sudo /opt/bitnami/ctlscript.sh stop mysql
+
+
+
+
+1. Listing the account - gcloud config configurations list
+2. Creating the account - gcloud config configurations create <account_name>
+3. Initiatlizing the acccount - gcloud init
+4. Activating the account -  gcloud config configurations activate default
+
+Samples
+------------------------
+gcloud config configurations create askjuno-website
+gcloud config configurations activate askjuno-website
+gcloud config configurations activate igates-config
+gcloud config configurations activate ideac-config
+gcloud config configurations activiate default
+
+
+
+Machine listing
+1. askjuno crm  = gcloud compute --project "bonsai-crm-id" ssh --zone "us-east1-b" "bonsai-crm-id"
+2. askjuno.com = gcloud compute --project "focus-ensign-176810" ssh --zone "asia-east1-c" "junome-bitnami-wordpress-14082017-vm"
+3. v2 crm = gcloud compute --project "candy-crm" ssh --zone "asia-south1-c" "candycrm-v2"
+4. igates crm = gcloud compute --project "storied-core-214506" ssh --zone "asia-south1-c" "candycrm-igates"
+5. ideac crm = gcloud compute --project "ideac-website" ssh --zone "us-west2-a" "candy-crm-instance-1"
+6. fypo crm = gcloud compute --project "candycrm-for-fypo" ssh --zone "asia-south1-c" "candycrm-fypo"
+
+
+Other Gcloud commands
+gcloud config set compute/zone us-east1-b
+gcloud config set project bonsai-crm-id
+gcloud compute scp  bonsai-crm-id:~/spw_config_22_11_2018.dmp .
+gcloud compute scp  bonsai-crm-id:~/spw_config_22_11_2018.dmp ~
+
+
+
