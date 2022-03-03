@@ -1,0 +1,7 @@
+1. Need to complete support for override configuration, for e.g the current command center does not support machine name overriding
+2. Need to ensure that there is a proper boundary between what is passed in command line and what gets configured in file
+3. Need to introduce command pattern to pick individual commands to execute rather than heap all the command code into a single file plus see if you can use functional programming
+4. Need to complete support solr mapreduce part of batch installation process
+5. export java home automation
+6. external configuration file support
+7. need to add ping support for all systems

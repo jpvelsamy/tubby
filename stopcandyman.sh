@@ -1,0 +1,1 @@
+python2.7 remote.jam.py --command stopcandyman --serverName in.handyman.server.HandymanServer

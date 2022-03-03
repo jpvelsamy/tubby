@@ -1,0 +1,1 @@
+python2.7 remote.jam.py --command buildcandyman --branch  $1 --targetfolder $2  --giturl  $3
